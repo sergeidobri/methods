@@ -5,6 +5,7 @@ import {
   Swordsman,
   Undead,
   Zombie,
+  Character,
 } from "../characters";
 
 test("Bowerman object has proper general fields", () => {
@@ -42,6 +43,10 @@ test.each([
   expect(() => new Bowerman(objName)).toThrow(Error);
 });
 
+test("bad type character", () => {
+  expect(() => new Character("Superman", "dsaddsa")).toThrow(Error);
+});
+
 test("level up", () => {
   const obj = new Bowerman("Legolas");
   obj.getDamage(1);
@@ -56,6 +61,13 @@ test("level up", () => {
   expect(obj.health).toBe(100);
   expect(obj.attack).toBeCloseTo(attackInit * 1.2);
   expect(obj.defence).toBeCloseTo(defenceInit * 1.2);
+});
+
+test("bad character tries to level up", () => {
+  const badBowerman = new Character("Legolas", Character.TYPES.Bowerman);
+  expect(badBowerman.level).toBe(1);
+  badBowerman.levelUp();
+  expect(badBowerman.level).toBe(1);
 });
 
 describe("damage tests", () => {
@@ -84,5 +96,12 @@ describe("damage tests", () => {
 
     expect(obj.health).toBe(0);
     expect(() => obj.levelUp()).toThrow(Error);
+  });
+
+  test("bad character gets damage", () => {
+    const badBowerman = new Character("Legolas", Character.TYPES.Bowerman);
+    expect(badBowerman.health).toBe(100);
+    badBowerman.getDamage(10);
+    expect(badBowerman.health).toBe(100);
   });
 });

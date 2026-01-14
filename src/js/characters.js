@@ -1,4 +1,4 @@
-class Character {
+export class Character {
   static TYPES = {
     Bowerman: "Bowerman",
     Swordsman: "Swordsman",
@@ -13,43 +13,24 @@ class Character {
       throw new Error("Invalid name");
     }
 
-    let attack = null;
-    let defence = null;
-    switch (type) {
-      case "Bowerman":
-        [attack, defence] = [25, 25];
-        break;
-      case "Swordsman":
-        [attack, defence] = [40, 10];
-        break;
-      case "Magician":
-        [attack, defence] = [10, 40];
-        break;
-      case "Daemon":
-        [attack, defence] = [10, 40];
-        break;
-      case "Undead":
-        [attack, defence] = [25, 25];
-        break;
-      case "Zombie":
-        [attack, defence] = [40, 10];
-        break;
+    if (!(type in Character.TYPES)) {
+      throw new Error("Invalid type");
     }
 
     this.name = name;
     this.type = type;
     this.health = 100;
     this.level = 1;
-    if (attack) this.attack = attack;
-    if (defence) this.defence = defence;
   }
 
   getDamage(points) {
+    if (!this.defence) return;
     const newHealth = this.health - points * (1 - this.defence / 100);
     this.health = newHealth >= 0 ? newHealth : 0;
   }
 
   levelUp() {
+    if (!this.attack || !this.defence) return;
     if (this.health == 0)
       throw new Error("It is imposible to level up while being dead");
     this.level += 1;
@@ -62,35 +43,47 @@ class Character {
 export class Bowerman extends Character {
   constructor(name) {
     super(name, Character.TYPES.Bowerman);
+    this.attack = 25;
+    this.defence = 25;
   }
 }
 
 export class Swordsman extends Character {
   constructor(name) {
     super(name, Character.TYPES.Swordsman);
+    this.attack = 40;
+    this.defence = 10;
   }
 }
 
 export class Magician extends Character {
   constructor(name) {
     super(name, Character.TYPES.Magician);
+    this.attack = 10;
+    this.defence = 40;
   }
 }
 
 export class Daemon extends Character {
   constructor(name) {
     super(name, Character.TYPES.Daemon);
+    this.attack = 10;
+    this.defence = 40;
   }
 }
 
 export class Undead extends Character {
   constructor(name) {
     super(name, Character.TYPES.Undead);
+    this.attack = 25;
+    this.defence = 25;
   }
 }
 
 export class Zombie extends Character {
   constructor(name) {
     super(name, Character.TYPES.Zombie);
+    this.attack = 40;
+    this.defence = 10;
   }
 }
